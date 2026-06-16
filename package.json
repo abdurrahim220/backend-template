@@ -10,7 +10,13 @@
     "dev": "dotenv -- nodemon",
     "gm": "ts-node generate-module.ts",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "prisma:generate": "dotenv -- prisma generate",
+    "prisma:migrate": "dotenv -- prisma migrate dev",
+    "prisma:push": "dotenv -- prisma db push",
+    "prisma:deploy": "dotenv -- prisma migrate deploy",
+    "prisma:studio": "dotenv -- prisma studio",
+    "prisma:reset": "dotenv -- prisma migrate reset"
   },
   "keywords": [
     "testing",
