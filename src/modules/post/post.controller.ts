@@ -18,19 +18,21 @@ class PostController {
     });
   });
 
-  getAllPosts = asyncHandler(async (req: Request, res: Response) => {
-    const result = await this.postService.findAllPosts();
+  getAllPosts = asyncHandler(async (req, res) => {
+    const result = await this.postService.findAllPosts(req.query);
+  
     sendResponse(res, {
       statusCode: status.OK,
       success: true,
       message: "Posts fetched successfully",
-      data: result,
+      data: result.items,
+      meta: result.meta,
     });
   });
 
   getPostById = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await this.postService.findPostById(Number(id));
+    const result = await this.postService.findPostById(id as string);
     sendResponse(res, {
       statusCode: status.OK,
       success: true,
@@ -41,7 +43,7 @@ class PostController {
 
   updatePost = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await this.postService.updatePost(Number(id), req.body);
+    const result = await this.postService.updatePost(id as string, req.body);
     sendResponse(res, {
       statusCode: status.OK,
       success: true,
@@ -52,7 +54,7 @@ class PostController {
 
   deletePost = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await this.postService.deletePost(Number(id));
+    const result = await this.postService.deletePost(id as string);
     sendResponse(res, {
       statusCode: status.OK,
       success: true,

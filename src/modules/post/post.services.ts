@@ -10,25 +10,25 @@ class PostService {
     return this.postRepo.createPost(data);
   }
 
-  async findAllPosts() {
-    return this.postRepo.findAllPosts();
+  async findAllPosts(query: Record<string, unknown>) {
+    return this.postRepo.findAllPosts(query);
   }
 
-  async findPostById(id: number) {
+  async findPostById(id: string) {
     if (!id) {
       throw new AppError("Enter a valid post Id", status.NOT_FOUND);
     }
     return this.postRepo.findPostById(id);
   }
 
-  async updatePost(id: number, data: Prisma.PostUpdateInput) {
+  async updatePost(id: string, data: Prisma.PostUpdateInput) {
     if (!id) {
       throw new AppError("Enter a valid post Id", status.NOT_FOUND);
     }
     return this.postRepo.updatePost(id, data);
   }
 
-  async deletePost(id: number) {
+  async deletePost(id: string) {
     return this.postRepo.deletePost(id);
   }
 }
