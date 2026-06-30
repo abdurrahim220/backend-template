@@ -11,7 +11,6 @@ const redisClient = createClient({
   socket: {
     connectTimeout: 5000,
     reconnectStrategy: (retries) => {
-
       const delay = Math.min(retries * 100, 3000);
       return delay;
     },

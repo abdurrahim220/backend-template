@@ -1,4 +1,3 @@
-
 import express, { Request, Response } from "express";
 import notFound from "./middleware/notFound";
 import cors from "cors";
@@ -17,13 +16,9 @@ app.get("/health", (req: Request, res: Response) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-
-app.use("/api/v1",router);
-
-
+app.use("/api/v1", router);
 
 app.use(notFound);
 app.use(globalErrorHandler);
-
 
 export default app;

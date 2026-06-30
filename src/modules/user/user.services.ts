@@ -7,6 +7,7 @@ class UserService {
   constructor(private userRepo: UserRepository) {}
 
   async createUser(data: Prisma.UserCreateInput) {
+    console.log("data", data);
     return this.userRepo.createUser(data);
   }
 
@@ -14,21 +15,21 @@ class UserService {
     return this.userRepo.findAllUsers();
   }
 
-  async findUserById(id: number) {
+  async findUserById(id: string) {
     if (!id) {
       throw new AppError("Enter a valid user Id", status.NOT_FOUND);
     }
     return this.userRepo.findUserById(id);
   }
 
-  async updateUser(id: number, data: Prisma.UserUpdateInput) {
+  async updateUser(id: string, data: Prisma.UserUpdateInput) {
     if (!id) {
       throw new AppError("Enter a valid user Id", status.NOT_FOUND);
     }
     return this.userRepo.updateUser(id, data);
   }
 
-  async deleteUser(id: number) {
+  async deleteUser(id: string) {
     return this.userRepo.deleteUser(id);
   }
 }

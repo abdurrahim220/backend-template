@@ -30,7 +30,7 @@ class UserController {
 
   getUserById = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await this.userService.findUserById(Number(id));
+    const result = await this.userService.findUserById(id as string);
     sendResponse(res, {
       statusCode: status.OK,
       success: true,
@@ -41,7 +41,7 @@ class UserController {
 
   updateUser = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await this.userService.updateUser(Number(id), req.body);
+    const result = await this.userService.updateUser(id as string, req.body);
     sendResponse(res, {
       statusCode: status.OK,
       success: true,
@@ -52,7 +52,7 @@ class UserController {
 
   deleteUser = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await this.userService.deleteUser(Number(id));
+    const result = await this.userService.deleteUser(id as string);
     sendResponse(res, {
       statusCode: status.OK,
       success: true,

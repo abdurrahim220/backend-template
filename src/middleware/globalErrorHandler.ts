@@ -13,7 +13,12 @@ import { ZodError } from "zod";
 import { ErrorMessages } from "../errors/errorTypes";
 import { config } from "../config/config";
 
-const globalErrorHandler = (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+const globalErrorHandler = (
+  err: unknown,
+  _req: Request,
+  res: Response,
+  _next: NextFunction,
+) => {
   let statusCode = 500;
   let message = "Something went wrong!";
   let errorMessages: ErrorMessages[] = [
@@ -83,7 +88,12 @@ const globalErrorHandler = (err: unknown, _req: Request, res: Response, _next: N
   }
 
   // ✅ If error already has statusCode/message (e.g. AppError)
-  else if (err && typeof err === "object" && "statusCode" in err && "message" in err) {
+  else if (
+    err &&
+    typeof err === "object" &&
+    "statusCode" in err &&
+    "message" in err
+  ) {
     const e = err as { statusCode: number; message: string };
     statusCode = e.statusCode;
     message = e.message;
@@ -95,7 +105,10 @@ const globalErrorHandler = (err: unknown, _req: Request, res: Response, _next: N
     ];
   }
   // ✅ If error is a token error
-  else if (err instanceof TokenExpiredError || err instanceof JsonWebTokenError) {
+  else if (
+    err instanceof TokenExpiredError ||
+    err instanceof JsonWebTokenError
+  ) {
     statusCode = 401;
     message = "Unauthorized";
     errorMessages = [
@@ -105,12 +118,12 @@ const globalErrorHandler = (err: unknown, _req: Request, res: Response, _next: N
       },
     ];
   }
- // logger.error({
- //    message: (err as Error).message || message,
- //    stack: (err as Error).stack,
- //    statusCode,
- //    errorMessages,
- //  });
+  // logger.error({
+  //    message: (err as Error).message || message,
+  //    stack: (err as Error).stack,
+  //    statusCode,
+  //    errorMessages,
+  //  });
   res.status(statusCode).json({
     success: false,
     message,

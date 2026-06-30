@@ -1,4 +1,3 @@
-
 import app from "./app";
 import { config } from "./config/config";
 import { connectToDatabase } from "./db/connectDB";
@@ -10,7 +9,6 @@ async function main() {
   app.listen(config.port, () => {
     console.log(`Server is running on port ${config.port}`);
   });
-  
 }
 
- main();
+main();
