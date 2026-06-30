@@ -1,6 +1,14 @@
 node_modules
 dist
-.DS_Store
+
 .env
-generate-module.ts
+.env.*
+
+.generated
 /generated/prisma
+
+.DS_Store
+
+coverage
+
+*.log
