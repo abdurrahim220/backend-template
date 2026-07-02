@@ -12,8 +12,7 @@ const mockPostRepo: jest.Mocked<PostRepository> = {
 
 const createPostInput = {
   title: "Quick Tip: JSON Formatting",
-  content:
-    "Always remember to validate your JSON before parsing it.",
+  content: "Always remember to validate your JSON before parsing it.",
   authorId: "123",
 };
 
@@ -22,9 +21,9 @@ const mockPost = {
   ...createPostInput,
   published: false,
   author: {
-      id: "123",
-      name: "John",
-    },
+    id: "123",
+    name: "John",
+  },
   createdAt: new Date(),
   updatedAt: new Date(),
 };
@@ -36,10 +35,8 @@ beforeEach(() => {
 });
 
 describe("PostService", () => {
-
   describe("createPost", () => {
     it("should create a post", async () => {
-
       const expectedRepositoryInput = {
         title: createPostInput.title,
         content: createPostInput.content,
@@ -56,11 +53,11 @@ describe("PostService", () => {
 
       expect(mockPostRepo.createPost).toHaveBeenCalledTimes(1);
 
-      expect(mockPostRepo.createPost)
-        .toHaveBeenCalledWith(expectedRepositoryInput);
+      expect(mockPostRepo.createPost).toHaveBeenCalledWith(
+        expectedRepositoryInput,
+      );
 
       expect(result).toEqual(mockPost);
-
     });
   });
 
@@ -83,12 +80,12 @@ describe("PostService", () => {
           totalPages: 1,
         },
       };
-  
+
       mockPostRepo.findAllPosts.mockResolvedValue(posts);
-  
+
       // Act
       const result = await service.findAllPosts({});
-  
+
       // Assert
       expect(mockPostRepo.findAllPosts).toHaveBeenCalledTimes(1);
       expect(mockPostRepo.findAllPosts).toHaveBeenCalledWith({});
@@ -96,50 +93,33 @@ describe("PostService", () => {
     });
   });
   describe("findPostById", () => {
-
     it("should return a post", async () => {
-
       mockPostRepo.findPostById.mockResolvedValue(mockPost);
 
       const result = await service.findPostById("1");
 
-      expect(mockPostRepo.findPostById)
-        .toHaveBeenCalledWith("1");
+      expect(mockPostRepo.findPostById).toHaveBeenCalledWith("1");
 
       expect(result).toEqual(mockPost);
-
     });
 
     it("should throw AppError when id is empty", async () => {
+      await expect(service.findPostById("")).rejects.toThrow(AppError);
 
-      await expect(
-        service.findPostById("")
-      ).rejects.toThrow(AppError);
-
-      expect(mockPostRepo.findPostById)
-        .not.toHaveBeenCalled();
-
+      expect(mockPostRepo.findPostById).not.toHaveBeenCalled();
     });
 
     it("should throw AppError when post does not exist", async () => {
-
       mockPostRepo.findPostById.mockResolvedValue(null);
 
-      await expect(
-        service.findPostById("1")
-      ).rejects.toThrow(AppError);
+      await expect(service.findPostById("1")).rejects.toThrow(AppError);
 
-      expect(mockPostRepo.findPostById)
-        .toHaveBeenCalledWith("1");
-
+      expect(mockPostRepo.findPostById).toHaveBeenCalledWith("1");
     });
-
   });
 
   describe("updatePost", () => {
-
     it("should update a post", async () => {
-
       const updateData = {
         title: "Updated Title",
       };
@@ -153,80 +133,51 @@ describe("PostService", () => {
 
       mockPostRepo.updatePost.mockResolvedValue(updatedPost);
 
-      const result = await service.updatePost(
-        "1",
-        updateData
-      );
+      const result = await service.updatePost("1", updateData);
 
-      expect(mockPostRepo.findPostById)
-        .toHaveBeenCalledWith("1");
+      expect(mockPostRepo.findPostById).toHaveBeenCalledWith("1");
 
-      expect(mockPostRepo.updatePost)
-        .toHaveBeenCalledWith("1", updateData);
+      expect(mockPostRepo.updatePost).toHaveBeenCalledWith("1", updateData);
 
       expect(result).toEqual(updatedPost);
-
     });
 
     it("should throw AppError when id is empty", async () => {
+      await expect(service.updatePost("", {})).rejects.toThrow(AppError);
 
-      await expect(
-        service.updatePost("", {})
-      ).rejects.toThrow(AppError);
-
-      expect(mockPostRepo.updatePost)
-        .not.toHaveBeenCalled();
-
+      expect(mockPostRepo.updatePost).not.toHaveBeenCalled();
     });
 
     it("should throw AppError when post does not exist", async () => {
-
       mockPostRepo.findPostById.mockResolvedValue(null);
 
-      await expect(
-        service.updatePost("1", {})
-      ).rejects.toThrow(AppError);
+      await expect(service.updatePost("1", {})).rejects.toThrow(AppError);
 
-      expect(mockPostRepo.updatePost)
-        .not.toHaveBeenCalled();
-
+      expect(mockPostRepo.updatePost).not.toHaveBeenCalled();
     });
-
   });
 
   describe("deletePost", () => {
-
     it("should delete a post", async () => {
-
       mockPostRepo.findPostById.mockResolvedValue(mockPost);
 
       mockPostRepo.deletePost.mockResolvedValue(mockPost);
 
       const result = await service.deletePost("1");
 
-      expect(mockPostRepo.findPostById)
-        .toHaveBeenCalledWith("1");
+      expect(mockPostRepo.findPostById).toHaveBeenCalledWith("1");
 
-      expect(mockPostRepo.deletePost)
-        .toHaveBeenCalledWith("1");
+      expect(mockPostRepo.deletePost).toHaveBeenCalledWith("1");
 
       expect(result).toEqual(mockPost);
-
     });
 
     it("should throw AppError when post does not exist", async () => {
-
       mockPostRepo.findPostById.mockResolvedValue(null);
 
-      await expect(
-        service.deletePost("1")
-      ).rejects.toThrow(AppError);
+      await expect(service.deletePost("1")).rejects.toThrow(AppError);
 
-      expect(mockPostRepo.deletePost)
-        .not.toHaveBeenCalled();
-
+      expect(mockPostRepo.deletePost).not.toHaveBeenCalled();
     });
-
   });
-
 });

@@ -95,21 +95,20 @@ export class QueryBuilder<T extends object> {
   /**
    * Sorting
    */
-   sortBy(defaultSort?: Partial<Record<keyof T, Order>>) {
-     const sortBy = this.query.sortBy;
-     const sortOrder = this.query.sortOrder;
-   
-     if (typeof sortBy === "string") {
-       this.orderBy = {
-         [sortBy]:
-           sortOrder === "asc" ? "asc" : "desc",
-       };
-     } else if (defaultSort) {
-       this.orderBy = defaultSort as Record<string, Order>;
-     }
-   
-     return this;
-   }
+  sortBy(defaultSort?: Partial<Record<keyof T, Order>>) {
+    const sortBy = this.query.sortBy;
+    const sortOrder = this.query.sortOrder;
+
+    if (typeof sortBy === "string") {
+      this.orderBy = {
+        [sortBy]: sortOrder === "asc" ? "asc" : "desc",
+      };
+    } else if (defaultSort) {
+      this.orderBy = defaultSort as Record<string, Order>;
+    }
+
+    return this;
+  }
 
   /**
    * Pagination

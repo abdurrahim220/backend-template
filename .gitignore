@@ -4,7 +4,7 @@ dist
 .env
 .env.*
 
-.generated
+generated
 /generated/prisma
 
 .DS_Store
@@ -12,3 +12,4 @@ dist
 coverage
 
 *.log
+
