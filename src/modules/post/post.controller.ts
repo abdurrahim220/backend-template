@@ -20,7 +20,7 @@ class PostController {
 
   getAllPosts = asyncHandler(async (req, res) => {
     const result = await this.postService.findAllPosts(req.query);
-  
+
     sendResponse(res, {
       statusCode: status.OK,
       success: true,

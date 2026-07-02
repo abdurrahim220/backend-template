@@ -2,8 +2,6 @@ import prisma from "../../db/connectDB";
 import { Prisma } from "../../../generated/prisma/client";
 import { QueryBuilder } from "../../queryBuilder/QueryBuilder";
 class PostRepository {
-
-  
   async findAllPosts(query: Record<string, unknown>) {
     const qb = new QueryBuilder(query)
       .search(["title", "content"])
@@ -11,11 +9,11 @@ class PostRepository {
       .dateRange("createdAt")
       .sortBy()
       .paginate();
-  
+
     const [items, total] = await prisma.$transaction([
       prisma.post.findMany({
         ...qb.getQuery(),
-  
+
         include: {
           author: {
             select: {
@@ -25,12 +23,12 @@ class PostRepository {
           },
         },
       }),
-  
+
       prisma.post.count({
         where: qb.getWhere(),
       }),
     ]);
-  
+
     return {
       items,
       meta: qb.getMeta(total),

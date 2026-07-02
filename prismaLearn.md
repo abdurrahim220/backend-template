@@ -12,3 +12,8 @@ You're progressing well, so here's the order I'd recommend:
 🔜 Aggregation (count, groupBy, aggregate)
 🔜 Middleware and Prisma Client extensions
 🔜 Building a reusable query builder (similar to what you've done with Mongoose)
+
+
+
+
+
