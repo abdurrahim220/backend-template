@@ -1,7 +1,9 @@
-type QueryParams = Record<string, unknown>;
-type Order = "asc" | "desc";
+import { Prisma } from "../../generated/prisma/client";
 
-export class QueryBuilder {
+type QueryParams = Record<string, unknown>;
+type Order = Prisma.SortOrder;
+
+export class QueryBuilder<T extends object> {
   private readonly query: QueryParams;
 
   private where: Record<string, unknown> = {};
@@ -20,7 +22,7 @@ export class QueryBuilder {
   /**
    * Search
    */
-  search(fields: string[]) {
+  search(fields: (keyof T)[]) {
     const search = this.query.search;
 
     if (typeof search === "string" && search.trim()) {
@@ -38,9 +40,9 @@ export class QueryBuilder {
   /**
    * Exact filters
    */
-  filterBy(fields: string[]) {
+  filterBy(fields: (keyof T)[]) {
     fields.forEach((field) => {
-      const value = this.query[field];
+      const value = this.query[field as string];
 
       if (value === undefined) return;
 
@@ -50,7 +52,7 @@ export class QueryBuilder {
       else if (value === "false") parsedValue = false;
       else if (!Number.isNaN(Number(value))) parsedValue = Number(value);
 
-      this.where[field] = parsedValue;
+      this.where[field as string] = parsedValue;
     });
 
     return this;
@@ -59,9 +61,11 @@ export class QueryBuilder {
   /**
    * Date range
    */
-  dateRange(field: string) {
-    const from = this.query[`${field}From`];
-    const to = this.query[`${field}To`];
+  dateRange(field: keyof T) {
+    const fieldName = field as string;
+
+    const from = this.query[`${fieldName}From`];
+    const to = this.query[`${fieldName}To`];
 
     const range: Record<string, Date> = {};
 
@@ -82,7 +86,7 @@ export class QueryBuilder {
     }
 
     if (Object.keys(range).length) {
-      this.where[field] = range;
+      this.where[fieldName] = range;
     }
 
     return this;
@@ -91,20 +95,21 @@ export class QueryBuilder {
   /**
    * Sorting
    */
-  sortBy(defaultSort: Record<string, Order> = { createdAt: "desc" }) {
-    const sortBy = this.query.sortBy;
-    const sortOrder = this.query.sortOrder;
-
-    if (typeof sortBy === "string") {
-      this.orderBy = {
-        [sortBy]: sortOrder === "asc" ? "asc" : "desc",
-      };
-    } else {
-      this.orderBy = defaultSort;
-    }
-
-    return this;
-  }
+   sortBy(defaultSort?: Partial<Record<keyof T, Order>>) {
+     const sortBy = this.query.sortBy;
+     const sortOrder = this.query.sortOrder;
+   
+     if (typeof sortBy === "string") {
+       this.orderBy = {
+         [sortBy]:
+           sortOrder === "asc" ? "asc" : "desc",
+       };
+     } else if (defaultSort) {
+       this.orderBy = defaultSort as Record<string, Order>;
+     }
+   
+     return this;
+   }
 
   /**
    * Pagination
@@ -132,14 +137,14 @@ export class QueryBuilder {
   }
 
   /**
-   * Only where (used for count)
+   * Only where
    */
   getWhere() {
     return this.where;
   }
 
   /**
-   * Pagination metadata
+   * Meta
    */
   getMeta(total: number) {
     return {

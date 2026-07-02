@@ -15,6 +15,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts Post[]
+  comments Comment[]
+  likes     Like[]
 }
 
 model Post {
@@ -24,6 +26,52 @@ model Post {
   published Boolean @default(false)
   author    User    @relation(fields: [authorId], references: [id])
   authorId  String
+  comments  Comment[]
+  tags      Tag[]
+  likes     Like[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  parentId  String?
+  parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("CommentReplies")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+
+  posts Post[]
+}
+
+
+model Like {
+  id       String @id @default(cuid())
+
+  userId   String
+  user     User @relation(fields:[userId], references:[id])
+
+  postId   String
+  post     Post @relation(fields:[postId], references:[id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
 }

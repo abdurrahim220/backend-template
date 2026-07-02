@@ -1,13 +1,15 @@
 import prisma from "../../db/connectDB";
-import { Prisma } from "../../../generated/prisma/client";
+import { Post, Prisma } from "../../../generated/prisma/client";
 import { QueryBuilder } from "../../queryBuilder/QueryBuilder";
 class PostRepository {
   async findAllPosts(query: Record<string, unknown>) {
-    const qb = new QueryBuilder(query)
+    const qb = new QueryBuilder<Post>(query)
       .search(["title", "content"])
       .filterBy(["published"])
       .dateRange("createdAt")
-      .sortBy()
+      .sortBy({
+        createdAt: "desc",
+      })
       .paginate();
 
     const [items, total] = await prisma.$transaction([
