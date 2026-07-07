@@ -22,3 +22,8 @@ npm i --save-dev nodemon dotenv-cli
 npm install express mongoose cors bcryptjs jsonwebtoken zod
 
 npm install -D  @types/express @types/cors @types/bcryptjs @types/jsonwebtoken 
+
+
+
+
+npx jest tests/comment/comment.test.ts 

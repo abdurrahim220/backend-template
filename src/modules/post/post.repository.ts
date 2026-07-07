@@ -22,6 +22,13 @@ class PostRepository {
               id: true,
               name: true,
             },
+            
+          },
+          comments: {
+            select: {
+              id: true,
+              content: true,
+            },
           },
         },
       }),

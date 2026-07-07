@@ -66,11 +66,15 @@ describe("PostService", () => {
       // Arrange
       const posts = {
         items: [
-          mockPost,
+          {
+            ...mockPost,
+            comments: [] as { id: string; content: string }[],
+          },
           {
             ...mockPost,
             id: "2",
             title: "Second Post",
+            comments: [] as { id: string; content: string }[],
           },
         ],
         meta: {

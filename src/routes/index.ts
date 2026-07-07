@@ -2,6 +2,8 @@ import { Router } from "express";
 import { UserRoutes } from "../modules/user/user.route";
 import { PostRoutes } from "../modules/post/post.route";
 
+import { CommentRoutes } from "../modules/comment/comment.route";
+
 const router = Router();
 
 const moduleRoute = [
@@ -13,6 +15,11 @@ const moduleRoute = [
     path: "/posts",
     router: PostRoutes,
   },
+
+  {
+    path: "/comments",
+    router: CommentRoutes,
+  }
 ];
 
 moduleRoute.forEach((route) => {

@@ -5,7 +5,7 @@ export const createCommentZodSchema = z.object({
     content: z.string(),
     postId: z.string(),
     authorId: z.string(),
-    parentId: z.string(),
+    parentId: z.string().optional(),
   }),
 });
 
