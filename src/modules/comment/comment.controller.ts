@@ -41,7 +41,10 @@ class CommentController {
 
   updateComment = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await this.commentService.updateComment(id as string, req.body);
+    const result = await this.commentService.updateComment(
+      id as string,
+      req.body,
+    );
     sendResponse(res, {
       statusCode: status.OK,
       success: true,

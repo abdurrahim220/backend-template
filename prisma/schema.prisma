@@ -27,6 +27,7 @@ model Post {
   author    User    @relation(fields: [authorId], references: [id])
   authorId  String
   comments  Comment[]
+  categories Category[]
   tags      Tag[]
   likes     Like[]
   createdAt DateTime @default(now())
@@ -47,6 +48,19 @@ model Comment {
   parentId  String?
   parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id])
   replies   Comment[] @relation("CommentReplies")
+  
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+
+  posts     Post[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

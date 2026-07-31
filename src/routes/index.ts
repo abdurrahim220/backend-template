@@ -19,7 +19,7 @@ const moduleRoute = [
   {
     path: "/comments",
     router: CommentRoutes,
-  }
+  },
 ];
 
 moduleRoute.forEach((route) => {

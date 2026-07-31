@@ -11,10 +11,18 @@ const commentRepository = new CommentRepository();
 const commentService = new CommentService(commentRepository);
 const commentController = new CommentController(commentService);
 
-router.post("/", zodValidate(createCommentZodSchema), commentController.createComment);
+router.post(
+  "/",
+  zodValidate(createCommentZodSchema),
+  commentController.createComment,
+);
 router.get("/", commentController.getAllComments);
 router.get("/:id", commentController.getCommentById);
-router.put("/:id", zodValidate(updateCommentZodSchema), commentController.updateComment);
+router.put(
+  "/:id",
+  zodValidate(updateCommentZodSchema),
+  commentController.updateComment,
+);
 router.delete("/:id", commentController.deleteComment);
 
 export const CommentRoutes = router;

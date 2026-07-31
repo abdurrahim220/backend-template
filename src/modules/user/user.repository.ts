@@ -1,13 +1,48 @@
 import prisma from "../../db/connectDB";
-import { Prisma } from "../../../generated/prisma/client";
+import { Prisma, User } from "../../../generated/prisma/client";
+import { QueryBuilder } from "../../queryBuilder/QueryBuilder";
 
 class UserRepository {
   async createUser(data: Prisma.UserCreateInput) {
     return prisma.user.create({ data });
   }
 
-  async findAllUsers() {
-    return prisma.user.findMany();
+  async findAllUsers(query: Record<string, unknown>) {
+    const qb = new QueryBuilder<User>(query)
+      .search(['name', 'email'])
+      .filterBy(['name', 'email'])
+      .dateRange('createdAt')
+      .sortBy({ createdAt: 'desc' })
+      .paginate();
+
+
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        ...qb.getQuery(),
+        include: {
+          comments: {
+            select: {
+              id: true,
+              content: true,
+            },
+          },
+          posts: {
+            select: {
+              id: true,
+              title:true,
+            }
+          }
+        }
+      }),
+      prisma.user.count({
+        where: qb.getWhere(),
+      }),
+    ]);
+
+    return {
+      users,
+      meta: qb.getMeta(total),
+    };
   }
 
   async findUserById(id: string) {

@@ -55,6 +55,8 @@ describe("UserService", () => {
           password: "123456",
           createdAt: new Date(),
           updatedAt: new Date(),
+          comments: [] as { id: string; content: string }[],
+          posts: [] as { id: string; title: string }[],
         },
         {
           id: "2",
@@ -63,17 +65,28 @@ describe("UserService", () => {
           password: "654321",
           createdAt: new Date(),
           updatedAt: new Date(),
+          comments: [] as { id: string; content: string }[],
+          posts: [] as { id: string; title: string }[],
         },
       ];
+      const mockResult = {
+        users,
+        meta: {
+          page: 1,
+          limit: 10,
+          total: 2,
+          totalPages: 1,
+        },
+      };
 
-      mockUserRepo.findAllUsers.mockResolvedValue(users);
+      mockUserRepo.findAllUsers.mockResolvedValue(mockResult);
 
       // Act
-      const result = await service.findAllUsers();
+      const result = await service.findAllUsers({});
 
       // Assert
       expect(mockUserRepo.findAllUsers).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(users);
+      expect(result).toEqual(mockResult);
     });
   });
 

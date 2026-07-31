@@ -19,7 +19,7 @@ class UserController {
   });
 
   getAllUsers = asyncHandler(async (req: Request, res: Response) => {
-    const result = await this.userService.findAllUsers();
+    const result = await this.userService.findAllUsers(req.query);
     sendResponse(res, {
       statusCode: status.OK,
       success: true,

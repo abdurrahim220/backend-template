@@ -12,7 +12,7 @@ class PostRepository {
       })
       .paginate();
 
-    const [items, total] = await prisma.$transaction([
+    const [items, total] = await Promise.all([
       prisma.post.findMany({
         ...qb.getQuery(),
 
@@ -22,7 +22,6 @@ class PostRepository {
               id: true,
               name: true,
             },
-            
           },
           comments: {
             select: {

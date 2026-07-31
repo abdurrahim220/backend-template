@@ -8,11 +8,26 @@ if (!config.databaseUrl) {
   process.exit(1);
 }
 
-const pool = new pg.Pool({
+// Prevent multiple instances of PrismaClient and pg.Pool in development
+declare global {
+  var prisma: PrismaClient | undefined;
+  var pgPool: pg.Pool | undefined;
+}
+
+const pool = globalThis.pgPool ?? new pg.Pool({
   connectionString: config.databaseUrl,
 });
+
+if (process.env.NODE_ENV !== "production") {
+  globalThis.pgPool = pool;
+}
+
 const adapter = new PrismaPg(pool);
-const prisma = new PrismaClient({ adapter });
+const prisma = globalThis.prisma ?? new PrismaClient({ adapter });
+
+if (process.env.NODE_ENV !== "production") {
+  globalThis.prisma = prisma;
+}
 
 export default prisma;
 
